@@ -1,0 +1,58 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 PRESERVE8                    ;
+    2 00000000         ;
+    3 00000000                 THUMB                        ;
+    4 00000000                 AREA             |.text|, CODE, READONLY ;
+    5 00000000                 EXPORT           bitflip
+    6 00000000                 entry
+    7 00000000         bitflip FUNCTION
+    8 00000000 B506            PUSH             {R1, R2, LR} ; push registers o
+                                                            nto the stack
+    9 00000002 4602            MOV              R2, R0      ;
+   10 00000004 FA92 F1A2       RBIT             R1, R2      ; reverses the bit 
+                                                            order
+   11 00000008 EA4F 6011       LSR              R0, R1, #24 ; logical right shi
+                                                            ft by 24
+   12 0000000C E8BD 4006       POP              {R1,R2, LR} ; restore previousl
+                                                            y saved register st
+                                                            ates
+   13 00000010 4770            BX               LR          ; branch to link re
+                                                            gister and continue
+                                                             as normal
+   14 00000012                 ENDFUNC
+   15 00000012                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\flipbits.d -o.\objects\flipbits.o -I"X:\University\Ye
+ar 2\Semester 2\Small Embedded Systems\Assignment\assignment-2-asteroids-liambr
+and-master\asteroids\RTE" -IX:\Keil\ARM\PACK\Keil\LPC4000_DFP\2.0.0\Device\Incl
+ude -IX:\Keil\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 521" --pred
+efine="CORE_M4 SETA 1" --list=.\listings\flipbits.lst flipbits.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 4 in file flipbits.s
+   Uses
+      None
+Comment: .text unused
+bitflip 00000000
+
+Symbol: bitflip
+   Definitions
+      At line 7 in file flipbits.s
+   Uses
+      At line 5 in file flipbits.s
+Comment: bitflip used once
+2 symbols
+335 symbols in table

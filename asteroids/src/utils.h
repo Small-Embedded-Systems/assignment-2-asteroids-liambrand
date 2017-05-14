@@ -12,6 +12,8 @@ typedef uint16_t colour_t;
         https://en.wikipedia.org/wiki/List_of_Crayola_colored_pencil_colors
         https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors
         For lists of R G B values you might want to use
+				Liam Brand
+			  w15002158 
     I'm using a macro here as the compiler might well convert it into a constant at compile time
 */
 #define rgb(r,g,b) ((uint16_t)(31 * r /255)<<11 | (uint16_t)(63 * g /255)<<5 | (uint16_t)(31 * b /255))

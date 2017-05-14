@@ -1,9 +1,3 @@
-/* Asteroids
-    Sample solution for assignment
-    Semester 2 -- Small Embedded Systems
-    Dr Alun Moon
-*/
-
 /* C libraries */
 #include <stdlib.h>
 #include <stdint.h>
@@ -20,51 +14,69 @@
 #include "view.h"
 #include "controller.h"
 
+void initialiseGame(void);
+void initialiseShip(void);
+void gameOver(void);
+void scoreTimer(void);
+
+
 /* Game state */
 float elapsed_time; 
 int   score;
 int   lives;
+bool 	paused = false;
 struct ship player;
 
 float Dt = 0.01f;
 
-Ticker model, view, controller;
+Ticker model, view, controller, scoreTracker;
 
-bool paused = true;
 /* The single user button needs to have the PullUp resistor enabled */
 DigitalIn userbutton(P2_10,PullUp);
-int main()
-{
 
+
+int main() {
     init_DBuffer();
-    
+    view.attach(draw, 0.025);
+    model.attach(physics, Dt);
+    controller.attach(controls, 0.1);
+		scoreTracker.attach(&scoreTimer, 1);
+		while(userbutton.read()) {
+					paused = true;
+					wait_ms(100);
+		}
+		paused = false;
+		initialiseGame();
+		initialiseShip();
+		while(!(lives < 0)) {
+			wait_ms(200);
+		}
+		gameOver();
+}
 
-    view.attach( draw, 0.025);
-    model.attach( physics, Dt);
-    controller.attach( controls, 0.1);
-    
-    lives = 5;
-    
-    /* Pause to start */
-    while( userbutton.read() ){ /* remember 1 is not pressed */
-        paused=true;
-        wait_ms(100);
-    }
-    paused = false;
-    
-    while(true) {
-        /* do one of */
-        /* Wait until all lives have been used
-        while(lives>0){
-            // possibly do something game related here
-            wait_ms(200);
-        }
-        */
-        /* Wait until each life is lost
-        while( inPlay ){
-            // possibly do something game related here
-            wait_ms(200);
-        }
-        */
-    }
+//Initialising game related variables
+void initialiseGame() {
+	score = 0;
+  lives = 3;
+}
+
+//Initialising ship position and shield at the game start
+void initialiseShip() {
+	player.p.x = 200;
+	player.p.y = 120;
+	player.shieldHealth = 300;
+}
+
+//Resets the stats upon a game over
+void gameOver() {
+	displayGameOver();
+	score = 0;
+	lives = 3;
+}
+
+//Increments the score for each second the player's ship is alive
+void scoreTimer() {
+	if(!paused) {
+		score++;
+	}
 }
